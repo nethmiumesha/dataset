@@ -1,0 +1,5 @@
+smartbugs-curated/
+generate_10k_solidity_dataset.py
+*.bak
+__pycache__/
+.ipynb_checkpoints/
