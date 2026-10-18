@@ -1,18 +1,18 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.20;
 
-abstract contract SecurityGuard_100810 {
+abstract contract ReentrancyGuard_100810 {
     uint256 private _status;
     modifier nonReentrant() {
-        require(_status != 2, "Reentrant call");
+        require(_status != 2, "ReentrancyGuard: reentrant call");
         _status = 2;
         _;
         _status = 1;
     }
 }
 
-contract SafeVault_100810 is SecurityGuard_100810 {
-    mapping(address => uint256) private balances;
+contract SafeVault_100810 is ReentrancyGuard_100810 {
+    mapping(address => uint256) private _balances;
     address public immutable owner;
 
     constructor() {
@@ -20,13 +20,18 @@ contract SafeVault_100810 is SecurityGuard_100810 {
     }
 
     function deposit() external payable {
-        balances[msg.sender] += msg.value;
+        require(msg.value > 0, "Zero deposit");
+        _balances[msg.sender] += msg.value;
     }
 
     function withdraw(uint256 amount) external nonReentrant {
-        require(balances[msg.sender] >= amount, "Insufficient balance");
-        balances[msg.sender] -= amount;
-        (bool ok, ) = payable(msg.sender).call{value: amount}("");
-        require(ok, "Transfer failed");
+        require(_balances[msg.sender] >= amount, "Insufficient balance");
+        _balances[msg.sender] -= amount;
+        (bool success, ) = payable(msg.sender).call{value: amount}("");
+        require(success, "ETH transfer failed");
+    }
+
+    function getBalance(address account) external view returns (uint256) {
+        return _balances[account];
     }
 }

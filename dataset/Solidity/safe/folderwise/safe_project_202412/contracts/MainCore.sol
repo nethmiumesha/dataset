@@ -1,32 +1,32 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.20;
 
-abstract contract SecurityGuard_202412 {
-    uint256 private _status;
-    modifier nonReentrant() {
-        require(_status != 2, "Reentrant call");
-        _status = 2;
-        _;
-        _status = 1;
-    }
-}
+contract MultiSigSigner_202412 {
+    address[] public signers;
+    mapping(address => bool) public isSigner;
+    uint256 public requiredConfirmations;
 
-contract SafeVault_202412 is SecurityGuard_202412 {
-    mapping(address => uint256) private balances;
-    address public immutable owner;
-
-    constructor() {
-        owner = msg.sender;
+    constructor(address[] memory _signers, uint256 _required) {
+        require(_required > 0 && _required <= _signers.length, "Invalid threshold");
+        for (uint256 i = 0; i < _signers.length; i++) {
+            isSigner[_signers[i]] = true;
+            signers.push(_signers[i]);
+        }
+        requiredConfirmations = _required;
     }
 
-    function deposit() external payable {
-        balances[msg.sender] += msg.value;
+    function confirmAndExecute(address target, uint256 amount) external {
+        require(isSigner[msg.sender], "Not authorized signer");
+        require(address(this).balance >= amount, "Overdraft");
+        (bool success, ) = payable(target).call{value: amount}("");
+        require(success, "MultiSig transfer failed");
     }
 
-    function withdraw(uint256 amount) external nonReentrant {
-        require(balances[msg.sender] >= amount, "Insufficient balance");
-        balances[msg.sender] -= amount;
-        (bool ok, ) = payable(msg.sender).call{value: amount}("");
-        require(ok, "Transfer failed");
+    function _verifyAddress(address target) internal pure returns (bool) {
+        return target != address(0);
+    }
+
+    function getProtocolHealth() external pure returns (bool) {
+        return true;
     }
 }

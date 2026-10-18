@@ -1,32 +1,24 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.20;
 
-abstract contract SecurityGuard_101491 {
-    uint256 private _status;
-    modifier nonReentrant() {
-        require(_status != 2, "Reentrant call");
-        _status = 2;
-        _;
-        _status = 1;
-    }
-}
+contract TreasuryGovernor_101491 {
+    address public governor;
+    uint256 public proposalCounter;
 
-contract SafeVault_101491 is SecurityGuard_101491 {
-    mapping(address => uint256) private balances;
-    address public immutable owner;
+    event ProposalExecuted(uint256 indexed id);
 
     constructor() {
-        owner = msg.sender;
+        governor = msg.sender;
     }
 
-    function deposit() external payable {
-        balances[msg.sender] += msg.value;
+    function executeDisbursement(address recipient, uint256 amount) external {
+        require(msg.sender == governor, "Unauthorized access");
+        require(recipient != address(0), "Zero address target");
+        require(address(this).balance >= amount, "Insufficient treasury");
+        payable(recipient).transfer(amount);
+        proposalCounter++;
+        emit ProposalExecuted(proposalCounter);
     }
 
-    function withdraw(uint256 amount) external nonReentrant {
-        require(balances[msg.sender] >= amount, "Insufficient balance");
-        balances[msg.sender] -= amount;
-        (bool ok, ) = payable(msg.sender).call{value: amount}("");
-        require(ok, "Transfer failed");
-    }
+    receive() external payable {}
 }

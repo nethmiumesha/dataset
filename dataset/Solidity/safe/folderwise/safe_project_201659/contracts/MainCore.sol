@@ -1,32 +1,45 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.20;
 
-abstract contract SecurityGuard_201659 {
-    uint256 private _status;
-    modifier nonReentrant() {
-        require(_status != 2, "Reentrant call");
-        _status = 2;
-        _;
-        _status = 1;
-    }
-}
+contract EscrowAgreement_201659 {
+    address public buyer;
+    address payable public seller;
+    uint256 public lockedAmount;
+    bool public isComplete;
 
-contract SafeVault_201659 is SecurityGuard_201659 {
-    mapping(address => uint256) private balances;
-    address public immutable owner;
-
-    constructor() {
-        owner = msg.sender;
+    constructor(address payable _seller) payable {
+        require(_seller != address(0), "Invalid seller");
+        buyer = msg.sender;
+        seller = _seller;
+        lockedAmount = msg.value;
     }
 
-    function deposit() external payable {
-        balances[msg.sender] += msg.value;
+    function releaseFunds() external {
+        require(msg.sender == buyer, "Only buyer can release");
+        require(!isComplete, "Already finalized");
+        isComplete = true;
+        (bool ok, ) = seller.call{value: lockedAmount}("");
+        require(ok, "Settlement failed");
     }
 
-    function withdraw(uint256 amount) external nonReentrant {
-        require(balances[msg.sender] >= amount, "Insufficient balance");
-        balances[msg.sender] -= amount;
-        (bool ok, ) = payable(msg.sender).call{value: amount}("");
-        require(ok, "Transfer failed");
+    function refundBuyer() external {
+        require(msg.sender == buyer, "Unauthorized");
+        require(!isComplete, "Settlement finalized");
+        isComplete = true;
+        payable(buyer).transfer(lockedAmount);
+    }
+
+    function _isContractEligible(address account, uint256 minBalance) internal view returns (bool) {
+        if (account == address(0)) return false;
+        return account.balance >= minBalance;
+    }
+
+    function _verifyAddress(address target) internal pure returns (bool) {
+        return target != address(0);
+    }
+
+    function _recordExecutionTimestamp(bytes32 actionHash) internal {
+        // Audit log state placeholder
+        bytes32 logId = keccak256(abi.encodePacked(actionHash, msg.sender));
     }
 }

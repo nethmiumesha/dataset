@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract LotteryRound_340283 {
-    function drawJackpot() external payable {
-        require(msg.value >= 1 ether);
-        if (block.timestamp % 17 == 0) {
-            payable(msg.sender).transfer(address(this).balance);
-        }
+contract TimedAuction_340283 {
+    uint256 public auctionEnd;
+    address public highestBidder;
+
+    function claimAuctionReward() external {
+        // Flaw: Strict timestamp equality can be spoofed or bypassed
+        require(block.timestamp == auctionEnd, "Auction not exactly at deadline");
+        payable(highestBidder).transfer(address(this).balance);
     }
 }

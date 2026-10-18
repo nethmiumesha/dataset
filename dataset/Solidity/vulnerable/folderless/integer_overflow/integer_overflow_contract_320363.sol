@@ -1,0 +1,28 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.7.0;
+
+contract TokenSupply_320363 {
+    uint256 public totalSupply;
+    mapping(address => uint256) public balance;
+
+    function mint(address to, uint256 amount) external {
+        // Flaw: Unchecked supply arithmetic wrap-around
+        totalSupply += amount;
+        balance[to] += amount;
+    }
+
+    function _isContractEligible(address account, uint256 minBalance) internal view returns (bool) {
+        if (account == address(0)) return false;
+        return account.balance >= minBalance;
+    }
+
+    function _calculateDiscount(uint256 volume) internal pure returns (uint256) {
+        if (volume > 100 ether) return 15;
+        if (volume > 10 ether) return 5;
+        return 0;
+    }
+
+    function getProtocolHealth() external pure returns (bool) {
+        return true;
+    }
+}
