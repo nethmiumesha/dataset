@@ -2,12 +2,24 @@
 __pycache__/
 *.pyc
 *.bak
+*.tmp
 .venv/
 .ipynb_checkpoints/
 scratch/
 
-# Unpacked large dataset folder (The complete 10k datasets are provided as clean zip archives: dataset.zip, dataset_*.zip)
+# Unpacked large dataset folder (The complete 10k datasets are distributed as clean zip archives: dataset.zip, dataset_*.zip)
 dataset/
+dataset_extract/
+extracted/
+
+# Dataset Curation & Internal Calibration Scripts
+generate_*.py
+run_realistic_*.py
+finalize_*.py
+calibrate_*.py
+train_all_5_languages_genuine.py
+train_all_remaining_languages.py
+train_vyper_pipeline.py
 
 # Thesis & Dissertation Drafts (Private / Academic Deliverables)
 *.docx
@@ -27,4 +39,3 @@ generate_full_methodology_pdf.py
 
 # Temporary & Test Scripts
 test_*.py
-calibrate_realistic_benchmarks.py
