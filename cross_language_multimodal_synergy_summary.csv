@@ -1,0 +1,6 @@
+Language,Member01_GNN_Acc,Member02_LLM_Acc,Multimodal_Fused_Acc
+Solidity,79.4,77.8,96.0
+Vyper,81.4,79.2,97.2
+Rust,80.0,78.5,96.6
+Go,78.6,76.4,95.4
+C++,82.6,80.1,97.4

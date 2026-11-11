@@ -1,0 +1,5 @@
+Feature_Configuration,Feature_Count,Accuracy (%),Balanced Accuracy (%),Precision (%),Recall / Sensitivity (%),Macro F1-Score (%),ROC-AUC Score,PR-AUC (Average Precision),Matthews Correlation Coefficient (MCC),Optimal Calibrated Threshold
+Quantitative-Only,2,50.0,50.0,50.0,100.0,66.66666666666666,0.47885599999999995,0.49047793844682275,0.0,0.5016294717788696
+Qualitative-Only,6,80.0,80.0,80.0,80.0,80.0,0.783,0.7571835052679405,0.6,0.55
+Context/Topology-Only,4,50.0,50.0,50.0,100.0,66.66666666666666,0.47592,0.4840055520990432,0.0,0.49369576573371887
+Combined 12D,12,80.0,80.0,80.0,80.0,80.0,0.7813200000000001,0.7772182567345534,0.6,0.55

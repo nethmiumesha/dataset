@@ -1,5 +1,30 @@
-smartbugs-curated/
-generate_10k_solidity_dataset.py
-*.bak
+# Python & Virtual Environment
 __pycache__/
+*.pyc
+*.bak
+.venv/
 .ipynb_checkpoints/
+scratch/
+
+# Unpacked large dataset folder (The complete 10k datasets are provided as clean zip archives: dataset.zip, dataset_*.zip)
+dataset/
+
+# Thesis & Dissertation Drafts (Private / Academic Deliverables)
+*.docx
+*.pdf
+thesis_figures/
+
+# Thesis Word/PDF Generation Tools
+build_helpers.py
+build_pdf_doc1.py
+build_pdf_doc1_canvas.py
+build_pdf_doc2.py
+create_final_word_doc.py
+update_word_doc.py
+generate_thesis_figures.py
+generate_thesis_methodology_pdf.py
+generate_full_methodology_pdf.py
+
+# Temporary & Test Scripts
+test_*.py
+calibrate_realistic_benchmarks.py
