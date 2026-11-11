@@ -102,11 +102,11 @@ All models were evaluated using stratified 80% train, 10% validation, and 10% te
 ### 2. Multi-Modal Synergy Benchmark (Member 01 GNN + Member 02 LLM)
 | Language | Member 01: Structural GNN | Member 02: Semantic LLM | **Integrated Multi-Modal Framework** | Synergistic Gain ($\Delta$) |
 | :--- | :---: | :---: | :---: | :---: |
-| **Solidity** | 79.40% | 77.80% | **96.00%** | **+16.60%** |
-| **Vyper** | 81.40% | 79.20% | **97.20%** | **+15.80%** |
-| **Rust** | 80.00% | 78.50% | **96.60%** | **+16.60%** |
-| **Go** | 78.60% | 76.40% | **95.40%** | **+16.80%** |
-| **C++** | 82.60% | 80.10% | **97.40%** | **+14.80%** |
+| **Solidity** | 79.40% | 
+| **Vyper** | 81.40% |
+| **Rust** | 80.00% |
+| **Go** | 78.60% |
+| **C++** | 82.60% | 
 
 ---
 
