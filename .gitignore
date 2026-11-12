@@ -28,6 +28,7 @@ thesis_figures/
 
 # Thesis Word/PDF Generation Tools
 build_helpers.py
+build_full_dissertation.py
 build_pdf_doc1.py
 build_pdf_doc1_canvas.py
 build_pdf_doc2.py
